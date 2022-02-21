@@ -107,3 +107,13 @@ flush
 fill
 
 ( Problems. Chapter 6)
+
+: star             42 emit ;
+: stars            0 do star loop ;
+: box              cr 0 do stars cr loop ;
+: \stars           spacing do i spaces 10 stars cr loop ;
+: /stars           spacing do dup i - spaces 10 stars cr loop ;
+
+10 3 box
+3 \stars
+3 /stars
