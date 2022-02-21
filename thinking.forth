@@ -144,3 +144,46 @@ date .date
 
 4500. sec
 
+( Arrays. )
+
+variable eggs
+variable counts 5 cells allot
+
+: reset      counts 6 cells erase ;
+: counter    cells counts + ;
+: tally      counter 1 swap +! ;
+: egg        1 eggs +! ;
+
+: category   dup 18 < if 0 else
+             dup 21 < if 1 else
+             dup 24 < if 2 else
+             dup 27 < if 3 else
+     	     dup 30 < if 4 else 5
+    	     then then then then then swap drop ;
+
+: label      dup 0 = if ." REJECT " else
+             dup 1 = if ." SMALL "  else
+             dup 2 = if ." MEDIUM " else
+             dup 3 = if ." LARGE "  else
+     	     dup 4 = if ." EXTRA-LARGE " else ." ERROR "
+    	     then then then then then drop ;
+
+: eggsize    category dup label tally ;
+: header     page ." QUANTITY SIZE " cr cr ;
+: report     header 6 0 do i counter @ 5 u.r 7 spaces i label cr loop ;
+
+variable basket 24 cells allot
+variable last
+
+: empty         basket 24 cells erase 0 last ! ;
+: rummage       basket 24 dump ;
+: update        1 last +! ;
+: counter       last @ dup 24 > if ." BASKET OVERFILLED! " quit then update cells basket + ;
+: stash         dup counter ! ." EGG STASHED ~~ " . cr ;
+: fetch         cells basket + @ ;
+
+: my-basket     14 7 6 1 0 99 30 27 22 35 17 19 ;
+: stash-basket  0 do stash loop ;
+: sort          last @ 0 do i fetch eggsize loop report ;
+
+my-basket 12 stash-basket sort reset empty
