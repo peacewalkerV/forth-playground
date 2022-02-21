@@ -154,12 +154,9 @@ variable counts 5 cells allot
 : tally      counter 1 swap +! ;
 : egg        1 eggs +! ;
 
-: category   dup 18 < if 0 else
-             dup 21 < if 1 else
-             dup 24 < if 2 else
-             dup 27 < if 3 else
-     	     dup 30 < if 4 else 5
-    	     then then then then then swap drop ;
+create sizes 18 c, 21 c, 24 c, 27 c, 30 c, 255 c,
+
+: category   6 0 do dup sizes i + c@ < if drop i leave then loop ;
 
 : label      dup 0 = if ." REJECT " else
              dup 1 = if ." SMALL "  else
@@ -175,7 +172,7 @@ variable counts 5 cells allot
 variable basket 24 cells allot
 variable last
 
-: empty         basket 24 cells erase 0 last ! ;
+: dump          over + swap do cr i @ 5 u.r 2 +loop ;
 : rummage       basket 24 dump ;
 : update        1 last +! ;
 : counter       last @ dup 24 > if ." BASKET OVERFILLED! " quit then update cells basket + ;
@@ -183,7 +180,15 @@ variable last
 : fetch         cells basket + @ ;
 
 : my-basket     14 7 6 1 0 99 30 27 22 35 17 19 ;
-: stash-basket  0 do stash loop ;
+: into-basket   0 do stash loop ;
 : sort          last @ 0 do i fetch eggsize loop report ;
+: empty         basket 24 cells erase 0 last ! ;
 
-my-basket 12 stash-basket sort reset empty
+my-basket 12 into-basket sort reset empty
+
+( Static arrays. )
+
+variable limits 8 allot
+create limits 220 , 340 , 170 , 100 , 190 ,
+
+limits 2 cells + @ . \ ~> 170
