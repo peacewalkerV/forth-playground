@@ -99,12 +99,12 @@ variable water-level
 
 : till-full        begin space-left? while operate level repeat ;
 : till-empty       begin -1 water-level +! water-level @ 0= until ;
-: fill             faucets open till-full faucets close ;
-: flush            faucets open till-empty faucets close ;
+: water-fill       faucets open till-full faucets close ;
+: water-flush      faucets open till-empty faucets close ;
 
-fill
-flush
-fill
+water-fill
+water-flush
+water-fill
 
 ( Problems. Chapter 6)
 
@@ -117,3 +117,30 @@ fill
 10 3 box
 3 \stars
 3 /stars
+
+( Signed/unsigned numbers. )
+
+: printables      127 32 do i emit space loop ;
+
+decimal 173 hex .
+0f decimal .
+1000.0000 d.
+
+: phone-number 372.8493 ;
+: date 04.10.86 ;
+
+: ud.    <# #s #> type space ;
+: .ph#   <# # # # # 45 hold #s #> type space ;
+: unit   # # 47 hold ;
+: .date  <# unit unit  #s  #> type space ;
+
+phone-number ud.
+phone-number .ph#
+date .date
+
+: sextal 6 base ! ;
+: :00    # sextal # decimal 58 hold ;
+: sec    <# :00 :00 #s #> type space ;
+
+4500. sec
+
